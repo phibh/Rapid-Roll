@@ -55,18 +55,12 @@
 				myObstacles.push(new component(90,5,"#DD4F8F",rd2,myGameArea.canvas.height - 114,"rectangle"));
 				myObstacles.push(new component(90,5,"#DD4F8F",rd1,myGameArea.canvas.height - 57,"rectangle"));
 
-				// myPencil = new component(90,5,"#DD4F8F",200,100,"pencil");
-
-				// myObstacles.push(myPencil);
-
 				myGamePiece = new component(20,20,"#DD4F8F",myObstacles[0].x + 45,myObstacles[0].y - 10,"circle");
 				myScoreTxt = new component("20px", "Consolas", "#FE2472", myGameArea.canvas.width/2, 40, "text");
 				myLife = new component("20px", "Consolas", "red", 40, 40, "text");
 
 				
-
-				
-				hightScoreTxt = new component("12px", "Consolas", "red", myGameArea.canvas.width/2 + 60, 18, "text");
+				hightScoreTxt = new component("12px", "Consolas", "red", myGameArea.canvas.width - 130, 18, "text");
 
 				
 				
@@ -162,7 +156,6 @@
 							ctx.fillStyle = this.color;
 							ctx.fill();
 
-							// console.log("Ve but chi");
 
 					    	break;
 					    	
@@ -202,7 +195,7 @@
 					if(mytop < 0 || mytop > myGameArea.canvas.height){
 
 						crash = true;
-						myScore = myScore - 20;
+						
 
 						return crash;
 					}
@@ -217,7 +210,7 @@
 									otherobj.x++;
 									myScore++;
 									if (otherobj.type == types.pencil) {
-										myScore = myScore - 20;
+										
 										crash = true;
 										return crash;
 									}
@@ -229,7 +222,7 @@
 									otherobj.x--;
 									myScore++;
 									if (otherobj.type == types.pencil) {
-										myScore = myScore - 20;
+										
 										crash = true;
 										return crash;
 									}
@@ -317,10 +310,6 @@
 						
 						myGameArea.stop();
 
-						// myScore = (myScore>0)?myScore:0;
-
-						// myScoreTxt.text="SCORE: " + myScore;
-						// myScoreTxt.update();
 
 						$("#btnLeft").css('display', 'none');
 	                	$("#btnRight").css('display', 'none');
@@ -421,15 +410,24 @@
 				       
 				    });
 
-					if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -5; }
-				    if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 5; }
+					if (myGameArea.keys && myGameArea.keys[37]) {
+						myGamePiece.speedX = -5; 
+						myGamePiece.newPos();
+						
+					}
+				    if (myGameArea.keys && myGameArea.keys[39]) {
+				    	myGamePiece.speedX = 5;
+				    	myGamePiece.newPos();
+				    }
 				    
 				    freefall();
 
 				    // myPencil.update();
 					
 					
-				    myGamePiece.newPos();
+				    // myGamePiece.newPos();
+				    // myGamePiece.hitLeft();
+				    // myGamePiece.hitRight();
 					myGamePiece.update();
 
 		    		// switch(lifeCounter){
