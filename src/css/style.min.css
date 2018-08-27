@@ -1,0 +1,76 @@
+*{
+	text-align: center;
+	/*box-sizing: border-box;*/
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+canvas{
+	border: 1px solid red;
+	background: #ffbed5;
+	/*width: 100vh;*/
+	/*height: 100vw;*/	
+}
+#myfilter{
+	position:absolute;
+	background-color: #FE2472;
+	opacity:0.3;
+	width:100%;
+	height:100%;
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+#myrestartbutton{
+	position:absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	top: 100px;
+	display:none;
+}
+#mystartbutton{
+	position:absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	top: 100px;
+	display:block;
+}
+button{
+	border: none;
+	background-color: #DD4F8F;
+	padding : 22px;
+	font-size: 20px;
+	border-radius: 10px;
+	font-family: verdana;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	/*cursor: pointer;*/
+}
+
+#btnLeft{
+	position: absolute;
+	height: 100%;
+	width: 50%;
+	left: 0px;
+	bottom: 0px;
+	opacity: 0;
+}
+#btnRight{
+	position: absolute;
+	height: 100%;
+	width: 50%;
+	right: 0px;
+	bottom: 0px;
+	opacity: 0;
+}
+
+#btnstartGame{
+	
+}
