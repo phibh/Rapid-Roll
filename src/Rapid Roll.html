@@ -5,7 +5,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<title>Rapid Roll</title>
-	<script src="js/jquery.min.js"></script>
 	
 	<link rel="stylesheet" href="css/style.min.css">
 
@@ -49,10 +48,24 @@
 	<button id="btnLeft"  style="display: none"></button>
   	<button id="btnRight"  style="display: none"></button><br><br>
 
-  	<script src="js/jquery.min.js"></script>
-	
-	<link rel="css/stylesheet" href="style.min.css">
 
+
+  	<script src="js/jquery.min.js"></script>
+
+  	<!-- jquery.min.js:2 [Violation] Added non-passive event listener to a scroll-blocking 'touchstart' event. Consider marking event handler as 'passive' to make the page more responsive. See https://www.chromestatus.com/feature/5745543795965952 -->
+
+  	<script>
+  		jQuery.event.special.touchstart = {
+  			setup: function( _, ns, handle ){
+  				if ( ns.includes("noPreventDefault") ) {
+  			    	this.addEventListener("touchstart", handle, { passive: false });
+  			    } else {
+  			      this.addEventListener("touchstart", handle, { passive: true });
+  			    }
+  			}
+  		};
+  	</script>
+	
 	<script src="js/RapidRoll.js"></script>
 
 </body>
