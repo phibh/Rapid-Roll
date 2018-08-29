@@ -1,29 +1,28 @@
 		$(document).ready(function () {
 
 
-			var myGameArea, myGamePiece,myScoreTxt,myMusic,mySound,myLife,mySawTop,hightScoreTxt,myPencil;
-			var myObstacles = [];
-			var myScore = 0;
-			var addLife = [];
-			var time = 0;
-			var hightScore = localStorage.getItem("Hight Score");
-			var lifeCounter = 3;
-
-
-
-			var types = {
+			var myGameArea, myGamePiece,myScoreTxt,myLife,mySawTop,hightScoreTxt
+			, myObstacles = []
+			, myScore = 0
+			, addLife = []
+			, time = 0
+			, hightScore = localStorage.getItem("Hight Score")
+			, lifeCounter = 3
+			, types = {
 				text: "text",
 				circle: "circle",
 				rectangle: "rectangle",
 				image : "image",
 				pencil :  "pencil"
-			};
-			
-			
+			}
+			, hcolor = 0;
+			// , lcolor = 48;
+
+
 			$("#btnstartGame").click(function(){
 				$("#myfilter").hide();
 	            $("#mystartbutton").hide();
-	            
+
 	            $("#btnLeft").css('display', 'inline-block');
 	            $("#btnRight").css('display', 'inline-block');
 	            startGame();
@@ -39,43 +38,37 @@
 
 			function init() {
 				myGameArea = new GameArea();
-				
 
 
-				$("#myMusic")[0].loop=true;
-				
-				
-				
+
+				$("#myMusic")[0].loop=!0;
+
+
+
 
 				var rd1 = Math.random() * (myGameArea.canvas.width-90 - 0) + 0;
 				var rd2 = Math.random() * (myGameArea.canvas.width-90 - 0) + 0;
 				var rd3 = Math.random() * (myGameArea.canvas.width-90 - 0) + 0;
 
-				myObstacles.push(new component(90,5,"#DD4F8F",rd3,myGameArea.canvas.height - 171,"rectangle"));
-				myObstacles.push(new component(90,5,"#DD4F8F",rd2,myGameArea.canvas.height - 114,"rectangle"));
-				myObstacles.push(new component(90,5,"#DD4F8F",rd1,myGameArea.canvas.height - 57,"rectangle"));
+				myObstacles.push(new component(90,5,"hsl(220,46%,48%)",rd3,myGameArea.canvas.height - 171,"rectangle"));
+				myObstacles.push(new component(90,5,"hsl(220,46%,48%)",rd2,myGameArea.canvas.height - 114,"rectangle"));
+				myObstacles.push(new component(90,5,"hsl(220,46%,48%)",rd1,myGameArea.canvas.height - 57,"rectangle"));
 
-				myGamePiece = new component(20,20,"#DD4F8F",myObstacles[0].x + 45,myObstacles[0].y - 10,"circle");
+				myGamePiece = new component(20,20,'#DD4F8F',myObstacles[0].x + 45,myObstacles[0].y - 10,"circle");
 				myScoreTxt = new component("20px", "Consolas", "#FE2472", myGameArea.canvas.width/2, 40, "text");
 				myLife = new component("20px", "Consolas", "red", 40, 40, "text");
 
-				
-				hightScoreTxt = new component("12px", "Consolas", "red", myGameArea.canvas.width - 130, 18, "text");
 
-				
-				
+				hightScoreTxt = new component("12px", "Consolas", "red", myGameArea.canvas.width - 130, 18, "text");
 
 				mySawTop = new component(myGameArea.canvas.width, 150, "SawTop.png", 0, 0, "image");
 
-
-
-
 				updateGameArea();
-				
+
 			};
 
 			function GameArea(){
-				this.pause = false;
+				this.pause = !1;
 				this.canvas = document.createElement("canvas");
 				this.canvas.width = window.innerWidth - 2;
 				this.canvas.height = window.innerHeight - 2;
@@ -85,38 +78,35 @@
 				$("#canvascontainer").append(this.canvas);
 
 
-				this.start = function(){		
+				this.start = function(){
 					// myMusic.play();
 					$("#myMusic")[0].play();
-					this.interval = setInterval(updateGameArea, 20);			
+					this.interval = setInterval(updateGameArea, 20);
 				}
 				this.clear = function() {
 					this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
 				}
 				this.stop = function (){
 					clearInterval(this.interval);
-					this.pause = true;
-					
+					this.pause = !0;
+
 					$("#myMusic")[0].pause()
 					time=0;
 				}
 			};
 
-			
 
-			function component(width, height, color, x , y, type, sx, sy, swidth, sheight) {
+
+			function component(width, height, color, x , y, type) {
 				this.width = width;
 				this.height = height;
 				this.type = type;
 				this.color = color;
 				this.x = x;
 				this.y = y;
-				this.sx = sx;
-				this.sy = sy;
-				this.swidth = swidth;
-				this.sheight = sheight;
 				this.speedX = 0;
 				this.speedY = 0;
+				this.lcolor = 48;
 				this.update = function(){
 					ctx = myGameArea.context;
 
@@ -124,20 +114,21 @@
 						case types.circle :
 							ctx.beginPath();
 					        ctx.arc(this.x,this.y, height/2, 0 , 2*Math.PI);
-					        ctx.fillStyle = color;
+
+					        ctx.fillStyle = this.color;
 					        ctx.fill();
-					        
+
 					        break;
 					    case types.rectangle :
-					    	ctx.fillStyle = color;
+					    	ctx.fillStyle = this.color;
 							ctx.fillRect(this.x, this.y, this.width, this.height);
-							
+
 							break;
 						case types.text :
 							ctx.font = this.width + " " + this.height;
-					        ctx.fillStyle = color;
+					        ctx.fillStyle = this.color;
 					        ctx.fillText(this.text, this.x, this.y);
-					       
+
 					        break;
 					    case types.image :
 				    		ctx.drawImage($("#SawTop")[0],this.x,this.y,this.width,this.height);
@@ -158,7 +149,7 @@
 
 
 					    	break;
-					    	
+
 					}
 
 				}
@@ -190,59 +181,71 @@
 					otherright = otherobj.x + otherobj.width;
 					othertop = otherobj.y;
 					otherbottom = otherobj.y + otherobj.height;
-					crash = false;
+					crash = !1;
 
 					if(mytop < 0 || mytop > myGameArea.canvas.height){
 
-						crash = true;
-						
+						crash = !0;
+
 
 						return crash;
 					}
-					
+
 
 					else if (((myleft > otherleft && myleft < otherright) || (myright > otherleft && myright < otherright)) && mybottom > othertop ) {
-						
+
 						if (mybottom - otherbottom > 3 ) {
 							if(mytop < othertop){
 								if (myright > otherleft && myleft < otherleft) {
 									this.x = otherleft - 10;
-									otherobj.x++;
-									myScore++;
-									if (otherobj.type == types.pencil) {
-										
-										crash = true;
-										return crash;
+
+                                    if (otherobj.type == types.pencil) {
+
+                                        crash = !0;
+                                        return crash;
+                                    }
+									if (otherobj.color!="hsl(220,46%,0%)"){
+                                        otherobj.lcolor--;
+									    otherobj.color = 'hsl(220,46%,'+otherobj.lcolor+'%)';
+                                        otherobj.x++;
+                                        myScore++;
 									}
-									crash = false;
+
+									crash = !1;
 									return crash;
 								}
 								if (myleft < otherright && myright > otherright) {
 									this.x = otherright + 10;
-									otherobj.x--;
-									myScore++;
-									if (otherobj.type == types.pencil) {
-										
-										crash = true;
-										return crash;
-									}
-									crash = false;
+                                    if (otherobj.type == types.pencil) {
+
+                                        crash = !0;
+                                        return crash;
+                                    }
+                                    if (otherobj.color!="hsl(220,46%,0%)"){
+                                        otherobj.lcolor--;
+                                        otherobj.color = 'hsl(220,46%,'+otherobj.lcolor+'%)';
+										otherobj.x--;
+                                        myScore++;
+                                    }
+
+
+									crash = !1;
 									return crash;
 								}
 
 							}
 
-							crash = false;
+							crash = !1;
 							return crash;
 						}
 						time = 0;
 						this.y = othertop - this.height + this.height / 2 ;
-						
-						crash = false;
+
+						crash = !1;
 						return crash;
 					}
 
-					
+
 					return crash;
 				}
 
@@ -255,13 +258,13 @@
 					otherright = otherobj.x + otherobj.width;
 					othertop = otherobj.y;
 					otherbottom = otherobj.y + otherobj.height;
-					crash = false;
+					crash = !1;
 
 					if ((myleft > otherleft && myleft < otherright) || (myright > otherleft && myright < otherright)  ) {
-						
-						crash = true;
+
+						crash = !0;
 						return crash;
-						
+
 					}
 					return crash;
 				}
@@ -275,27 +278,28 @@
 					otherright = otherobj.x + 11;
 					othertop = otherobj.y - 13;
 					otherbottom = otherobj.y;
-					crash = false;
+					crash = !1;
 
 					if( ((myleft > otherleft && myleft < otherright) || (myright > otherleft && myright < otherright)) && ( (othertop > mytop && othertop < mybottom) || (otherbottom > mytop && otherbottom < mybottom) )){
 
 						$("#add-life")[0].play();
 						myScore = myScore + 100;
 
-						crash = true;
+						crash = !0;
 						return crash;
-					}	
-					return crash;	
+					}
+					return crash;
 				}
-			};	
+			};
 
 			function updateGameArea() {
-				
+                hcolor += 17*0.34;
+                myGamePiece.color = 'hsl('+hcolor+',100%,50%)';
 
 				for (i = 0; i < myObstacles.length; i++) {
 
 					if(myGamePiece.collision(myObstacles[i])){
-						
+
 						$("#mySound")[0].play();
 						if(stillAlive()){
 							extraLife();
@@ -307,7 +311,7 @@
 
 						localStorage.setItem("Hight Score", hightScore);
 
-						
+
 						myGameArea.stop();
 
 
@@ -320,36 +324,44 @@
 					}
 				}
 
-				if (myGameArea.pause == false) {
+				if (myGameArea.pause == !1) {
 					myGameArea.clear();
 					myGameArea.frameNo += 1;
 
-					
+
 					agm = (myGameArea.frameNo < 1000)?60:10;
-	
+
 					if (myGameArea.frameNo == 1 || everyinterval(agm)) {
-						
+
 						var rd = Math.random() * (myGameArea.canvas.width-90 - 0) + 0;
 						var rd2 = Math.random() * (90 - 0) + 0;
 
 						if (myGameArea.frameNo > 1000 && everyinterval(20) ) {
 							myObstacles.push(new component(90,5,"#DD4F8F",rd,myGameArea.canvas.height,"pencil"));
-							
+
 						}
-						else{
-							myObstacles.push(new component(90,5,"#DD4F8F",rd,myGameArea.canvas.height ,"rectangle"));
+						else {
+
+							if (everyinterval(30)){
+                                myObstacles.push(new component(90,5,"#4267B2",rd,myGameArea.canvas.height ,"rectangle"));
+
+							}
+							else {
+                                myObstacles.push(new component(90,5,"hsl(220,46%,0%)",rd,myGameArea.canvas.height ,"rectangle"));
+
+							}
 						}
 
 						if (everyinterval(600)) {
 
 							addLife.push(new component("20px", "Consolas", "red", rd + rd2, myGameArea.canvas.height, "text"));
-							
+
 						}
-												
+
 					}
 
-				
-					
+
+
 					for ( i = 0; i < myObstacles.length; i++) {
 						if (myObstacles[i].y < -20) {
 							myObstacles.shift();
@@ -363,7 +375,7 @@
 						if (myGamePiece.collisionWithHeart(addLife[i])) {
 							addLife.shift();
 							lifeCounter ++ ;
-							
+
 						}
 
 						if (addLife.length!=0 && addLife[i].y < -20 ) {
@@ -372,62 +384,66 @@
 
 						if(addLife.length!=0 ){
 							addLife[i].text = "♥";
+							addLife[i].color = 'hsl('+hcolor+',100%,50%)';
 							addLife[i].y --;
 							addLife[i].update();
 						}
-						
+
 					}
-					
+
 					myGamePiece.speedY = 0;
 					myGamePiece.speedX = 0;
 
-					
+
 
 			        $('#btnRight').on('touchstart', function(){
 
 			        	myGameArea.keys = (myGameArea.keys || []);
-			            myGameArea.keys[39] = true;			        	
-				        
+			            myGameArea.keys[39] = !0;
+
 				    });
 				    $('#btnRight').on('touchend', function(){
-				               
+
 			        	myGameArea.keys = (myGameArea.keys || []);
-			            myGameArea.keys[39] = false;			        	
-				       
+			            myGameArea.keys[39] = !1;
+
 				    });
 
 				    $('#btnLeft').on('touchstart', function(){
-				            
+
 			        	myGameArea.keys = (myGameArea.keys || []);
-			            myGameArea.keys[37] = true;			        	
-			        
+			            myGameArea.keys[37] = !0;
+
 				    });
-				    
+
 				    $('#btnLeft').on('touchend', function(){
-				            
+
 			        	myGameArea.keys = (myGameArea.keys || []);
-			            myGameArea.keys[37] = false;			        	
-				       
+			            myGameArea.keys[37] = !1;
+
 				    });
 
 					if (myGameArea.keys && myGameArea.keys[37]) {
-						myGamePiece.speedX = -5; 
+						myGamePiece.speedX = -5;
 						myGamePiece.newPos();
-						
+
 					}
 				    if (myGameArea.keys && myGameArea.keys[39]) {
 				    	myGamePiece.speedX = 5;
 				    	myGamePiece.newPos();
 				    }
-				    
+
 				    freefall();
 
 				    // myPencil.update();
-					
-					
+
+
 				    // myGamePiece.newPos();
 				    // myGamePiece.hitLeft();
 				    // myGamePiece.hitRight();
+
+					// myGamePiece.color = 'hsl('+ hcolor +',100%,50%)';
+					// console.log(hcolor);
 					myGamePiece.update();
 
 		    		// switch(lifeCounter){
@@ -464,24 +480,24 @@
 		    			hightScoreTxt.text= "Hight Score " + hightScore.toString();
 		    			hightScoreTxt.update();
 		    		}
-		    		
-		    		
-					
+
+
+
 		    		myScore = (myScore>0)?myScore:0;
 
 		    		myScoreTxt.text="SCORE: " + myScore;
 		    		myScoreTxt.update();
-		    		
+
 					mySawTop.update();
 
 				}
-				
-				
+
+
 
 			};
 			function stillAlive(){
-				if (lifeCounter >= 1) {return true};
-				return false;
+				if (lifeCounter >= 1) {return !0};
+				return !1;
 			};
 
 			function extraLife(){
@@ -545,7 +561,7 @@
 										// console.log("change 4");
 										myGamePiece.x = myObstacles[i].x + 45;
 										myGamePiece.y = myObstacles[i].y - 10;
-										
+
 										if(myGamePiece.collisionAtBirth(myObstacles[i-1])){
 											i++;
 											// console.log("change 5");
@@ -570,24 +586,24 @@
 														myGamePiece.x = myObstacles[i].x + 45;
 														myGamePiece.y = myObstacles[i].y - 10;
 
-														
-														
+
+
 													}
-													
+
 												}
-												
+
 											}
 
-											
+
 										}
 									}
 
-								}	
-							}	
-						}		
-						
+								}
+							}
+						}
+
 				}
-				
+
 				time = 0;
 			};
 			$('#restartGame').on('touchstart', function(){
@@ -595,13 +611,13 @@
 				    $("#myfilter").css("display","none");
 				    $("#myrestartbutton").css("display","none");
 				    $("#btnLeft").css('display', 'inline-block');
-                	$("#btnRight").css('display', 'inline-block');	
-				    
+                	$("#btnRight").css('display', 'inline-block');
+
 				    myGameArea.stop();
 				    myGameArea.clear();
 				    myGameArea = {};
 				    myGamePiece = {};
-				    
+
 				    myObstacles = [];
 				    addLife = [];
 
@@ -620,12 +636,12 @@
 			};
 
 			function everyinterval(n){
-				if ((myGameArea.frameNo / n )%1 ==0) {return true;}
-				return false;
+				if ((myGameArea.frameNo / n )%1 ==0) {return !0;}
+				return !1;
 			};
 
-			
 
-			
-			
+
+
+
 		})
