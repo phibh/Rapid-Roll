@@ -394,6 +394,17 @@
 					myGamePiece.speedY = 0;
 					myGamePiece.speedX = 0;
 
+					/*key event*/
+					window.addEventListener('keydown', function (e) {
+			            myGameArea.keys = (myGameArea.keys || []);
+			            myGameArea.keys[e.keyCode] = (e.type == "keydown");
+		       		})
+			        window.addEventListener('keyup', function (e) {
+			        	myGameArea.keys = (myGameArea.keys || []);
+			            myGameArea.keys[e.keyCode] = (e.type == "keydown");            
+			        })
+			        /*end key event*/
+
 
 
 			        $('#btnRight').on('touchstart', function(){
